@@ -1,0 +1,144 @@
+[
+    {
+        "label": "*",
+        "importPath": "database",
+        "description": "database",
+        "isExtraImport": true,
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "tabulate",
+        "importPath": "tabulate",
+        "description": "tabulate",
+        "isExtraImport": true,
+        "detail": "tabulate",
+        "documentation": {}
+    },
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "menu_principal",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def menu_principal():\n    print(\n        \"\"\"        #######################################\n                GESTION DE STOCK\n        #######################################\\n\"\"\"\n    )\n    print(\"Elija una opcion\")\n    print(\"opcion 1: Agregar un producto\")\n    print(\"opcion 2: Ver lista completa de productos\")\n    print(\"opcion 3: Eliminar un producto de la lista\")",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "buscar_un_producto",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def buscar_un_producto():\n    try:\n        criterio = (\n            input(\n                \"¿Desea buscar el producto por 'ID' o por 'Nombre'? (Escriba 'ID' o 'Nombre'): \"\n            )\n            .strip()\n            .lower()\n        )\n        if criterio == \"nombre\":",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "insertar_producto",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def insertar_producto():\n    try:\n        nombre = input(\"Ingrese el nombre del producto: \")\n        descripcion = input(\"Ingrese la descripción del producto: \")\n        precio = float(input(\"Ingrese el precio del producto: \"))\n        cantidad = int(input(\"Ingrese la cantidad del producto: \"))\n        categoria = input(\n            \"Ingrese la categoría del producto (ropa de hombre, ropa de mujer, ropa de niño, calzado): \"\n        )\n        # Crear cursor",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "ver_lista_completa_productos",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def ver_lista_completa_productos():\n    try:\n        # Conexión y ejecución de la consulta\n        cursor = conn.cursor()\n        cursor.execute(\n            \"\"\"\n            SELECT *\n            FROM productos\n            \"\"\"\n        )",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "eliminar_producto",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def eliminar_producto():\n    try:\n        criterio = (\n            input(\n                \"¿Desea eliminar el producto por 'ID' o por 'Nombre'? (Escriba 'ID' o 'Nombre'): \"\n            )\n            .strip()\n            .lower()\n        )\n        if criterio == \"id\":",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "actualizar_producto",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def actualizar_producto():\n    try:\n        criterio = (\n            input(\n                \"¿Desea actualizar el producto por 'ID' o por 'Nombre'? (Escriba 'ID' o 'Nombre'): \"\n            )\n            .strip()\n            .lower()\n        )\n        if criterio not in [\"id\", \"nombre\"]:",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "mostrar_stock",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def mostrar_stock():\n    try:\n        nombre_producto = (\n            input(\"Ingrese el nombre del producto que desea ver el stock: \")\n            .strip()\n            .lower()\n        )\n        cursor = conn.cursor()\n        cursor.execute(\n            \"\"\"",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "detectar_stock_bajo",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def detectar_stock_bajo():\n    cursor = conn.cursor()\n    cursor.execute(\"\"\"SELECT id,nombre, cantidad FROM productos WHERE CANTIDAD < 10;\"\"\")\n    cantidades = cursor.fetchall()\n    print(\"=\" * 40)\n    print(\"productos con bajo stock :\")\n    print(\"=\" * 40)\n    print(\"\")\n    for cantidad in cantidades:\n        print(f\"id:{cantidad[0]} - producto: {cantidad[1]} - contidad: {cantidad[2]}\")",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def main():\n    while True:\n        menu_principal()  # Mostrar el menú al inicio del bucle\n        opcion_elegida = input(\"Elija una opción: \")\n        if opcion_elegida == \"1\":\n            insertar_producto()\n        elif opcion_elegida == \"2\":\n            ver_lista_completa_productos()\n        elif opcion_elegida == \"3\":\n            eliminar_producto()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "crear_tabla",
+        "kind": 2,
+        "importPath": "database",
+        "description": "database",
+        "peekOfCode": "def crear_tabla():\n    cursor = conn.cursor()\n    cursor.execute(\n        \"\"\"\n    CREATE TABLE IF NOT EXISTS productos (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        nombre TEXT NOT NULL,\n        descripcion TEXT,\n        precio REAL NOT NULL,\n        cantidad INTEGER NOT NULL,",
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "conn",
+        "kind": 5,
+        "importPath": "database",
+        "description": "database",
+        "peekOfCode": "conn = sql.connect(\"inventario\")\nconn.commit()\nconn.close()\ndef crear_tabla():\n    cursor = conn.cursor()\n    cursor.execute(\n        \"\"\"\n    CREATE TABLE IF NOT EXISTS productos (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        nombre TEXT NOT NULL,",
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "conn",
+        "kind": 5,
+        "importPath": "database",
+        "description": "database",
+        "peekOfCode": "conn = sqlite3.connect(\"inventario\")\nimport sqlite3\n# Conexión global a la base de datos\nconn = sqlite3.connect(\"inventario\")\n# def insertar_producto():\n#     try:\n#         nombre = input(\"Ingrese el nombre del producto: \")\n#         descripcion = input(\"Ingrese la descripción del producto: \")\n#         precio = float(input(\"Ingrese el precio del producto: \"))\n#         cantidad = int(input(\"Ingrese la cantidad del producto: \"))",
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "conn",
+        "kind": 5,
+        "importPath": "database",
+        "description": "database",
+        "peekOfCode": "conn = sqlite3.connect(\"inventario\")\n# def insertar_producto():\n#     try:\n#         nombre = input(\"Ingrese el nombre del producto: \")\n#         descripcion = input(\"Ingrese la descripción del producto: \")\n#         precio = float(input(\"Ingrese el precio del producto: \"))\n#         cantidad = int(input(\"Ingrese la cantidad del producto: \"))\n#         categoria = input(\n#             \"Ingrese la categoría del producto (ropa de hombre, ropa de mujer, ropa de niño, calzado): \"\n#         )",
+        "detail": "database",
+        "documentation": {}
+    }
+]
