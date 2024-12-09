@@ -1,12 +1,14 @@
 import sqlite3
 from database import *
 from tabulate import tabulate
+from colorama import Fore, Back, Style
 
 
 #### menu principal
 def menu_principal():
     print(
-        """        #######################################
+        Style.BRIGHT
+        + """        #######################################
                 GESTION DE STOCK
         #######################################\n"""
     )
@@ -52,7 +54,7 @@ def buscar_un_producto():
             producto_encontrado = cursor.fetchone()
 
             if producto_encontrado:
-                print("\nProducto encontrado:")
+                print(Fore.YELLOW + "\nProducto encontrado:")
                 print(f"ID: {producto_encontrado[0]}")
                 print(f"Nombre: {producto_encontrado[1]}")
                 print(f"Descripción: {producto_encontrado[2]}")

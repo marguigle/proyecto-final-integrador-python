@@ -33,6 +33,30 @@
         "documentation": {}
     },
     {
+        "label": "Fore",
+        "importPath": "colorama",
+        "description": "colorama",
+        "isExtraImport": true,
+        "detail": "colorama",
+        "documentation": {}
+    },
+    {
+        "label": "Back",
+        "importPath": "colorama",
+        "description": "colorama",
+        "isExtraImport": true,
+        "detail": "colorama",
+        "documentation": {}
+    },
+    {
+        "label": "Style",
+        "importPath": "colorama",
+        "description": "colorama",
+        "isExtraImport": true,
+        "detail": "colorama",
+        "documentation": {}
+    },
+    {
         "label": "main",
         "kind": 2,
         "importPath": "app",
@@ -82,7 +106,7 @@
         "kind": 2,
         "importPath": "funciones",
         "description": "funciones",
-        "peekOfCode": "def menu_principal():\n    print(\n        \"\"\"        #######################################\n                GESTION DE STOCK\n        #######################################\\n\"\"\"\n    )\n    print(\"Elija una opcion\")\n    print(\"opcion 1: Agregar un producto\")\n    print(\"opcion 2: Ver lista completa de productos\")\n    print(\"opcion 3: Eliminar un producto de la lista\")",
+        "peekOfCode": "def menu_principal():\n    print(\n        Style.BRIGHT\n        + \"\"\"        #######################################\n                GESTION DE STOCK\n        #######################################\\n\"\"\"\n    )\n    print(\"Elija una opcion\")\n    print(\"opcion 1: Agregar un producto\")\n    print(\"opcion 2: Ver lista completa de productos\")",
         "detail": "funciones",
         "documentation": {}
     },
