@@ -33,15 +33,13 @@ def buscar_un_producto():
         )
 
         if criterio == "nombre":
-            # Pedir el nombre del producto al usuario
+
             nombre_producto = input(
                 "Ingrese el nombre del producto que desea buscar: "
             ).lower()
 
-            # Crear cursor
             cursor = conn.cursor()
 
-            # Consulta parametrizada para evitar inyección SQL
             cursor.execute(
                 """
             SELECT id, nombre, descripcion, precio, cantidad, categoria
@@ -51,10 +49,7 @@ def buscar_un_producto():
                 (f"%{nombre_producto}%",),
             )
 
-            # Obtener el producto encontrado
-            producto_encontrado = (
-                cursor.fetchone()
-            )  # fetchone() para un único resultado
+            producto_encontrado = cursor.fetchone()
 
             if producto_encontrado:
                 print("\nProducto encontrado:")
@@ -74,10 +69,8 @@ def buscar_un_producto():
                 input("Ingrese la ID del producto que desea buscar: ").lower().strip()
             )
 
-            # Crear cursor
             cursor = conn.cursor()
 
-            # Consulta parametrizada para evitar inyección SQL
             cursor.execute(
                 """
             SELECT id, nombre, descripcion, precio, cantidad, categoria
@@ -87,10 +80,7 @@ def buscar_un_producto():
                 (id_producto),
             )
 
-            # Obtener el producto encontrado
-            producto_encontrado = (
-                cursor.fetchone()
-            )  # fetchone() para un único resultado
+            producto_encontrado = cursor.fetchone()
 
             if producto_encontrado:
                 print("\nProducto encontrado:")
@@ -101,7 +91,9 @@ def buscar_un_producto():
                 print(f"Cantidad: {producto_encontrado[4]}")
                 print(f"Categoría: {producto_encontrado[5]}\n")
             else:
+                print("=" * 60)
                 print(f"\nNo se encontró ningún producto con la ID '{id_producto}'.\n")
+                print("=" * 60)
             cursor.close()
     except sqlite3.Error as e:
         print(f"Error al buscar el producto: {e}")
@@ -120,10 +112,8 @@ def insertar_producto():
             "Ingrese la categoría del producto (ropa de hombre, ropa de mujer, ropa de niño, calzado): "
         )
 
-        # Crear cursor
         cursor = conn.cursor()
 
-        # Consulta parametrizada para evitar inyección SQL
         cursor.execute(
             """
                     INSERT INTO productos (nombre, descripcion, precio, cantidad, categoria)
@@ -132,7 +122,6 @@ def insertar_producto():
             (nombre, descripcion, precio, cantidad, categoria),
         )
 
-        # Confirmar cambios
         conn.commit()
         print("=" * 60)
         print(f"el producto {nombre} se ha agregado al stock correctamente !!!")
@@ -377,5 +366,3 @@ def detectar_stock_bajo():
 
         print(f"id:{cantidad[0]} - producto: {cantidad[1]} - contidad: {cantidad[2]}")
         print("-" * 40)
-
-        # Mostrar solo el valor de la cantid

@@ -37,7 +37,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def main():\n    while True:\n        menu_principal()  # Mostrar el menú al inicio del bucle\n        opcion_elegida = input(\"Elija una opción: \")\n        if opcion_elegida == \"1\":\n            insertar_producto()\n        elif opcion_elegida == \"2\":\n            ver_lista_completa_productos()\n        elif opcion_elegida == \"3\":\n            eliminar_producto()",
+        "peekOfCode": "def main():\n    while True:\n        menu_principal()\n        opcion_elegida = input(\"Elija una opción: \")\n        if opcion_elegida == \"1\":\n            insertar_producto()\n        elif opcion_elegida == \"2\":\n            ver_lista_completa_productos()\n        elif opcion_elegida == \"3\":\n            eliminar_producto()",
         "detail": "app",
         "documentation": {}
     },
@@ -100,7 +100,7 @@
         "kind": 2,
         "importPath": "funciones",
         "description": "funciones",
-        "peekOfCode": "def insertar_producto():\n    try:\n        nombre = input(\"Ingrese el nombre del producto: \")\n        descripcion = input(\"Ingrese la descripción del producto: \")\n        precio = float(input(\"Ingrese el precio del producto: \"))\n        cantidad = int(input(\"Ingrese la cantidad del producto: \"))\n        categoria = input(\n            \"Ingrese la categoría del producto (ropa de hombre, ropa de mujer, ropa de niño, calzado): \"\n        )\n        # Crear cursor",
+        "peekOfCode": "def insertar_producto():\n    try:\n        nombre = input(\"Ingrese el nombre del producto: \")\n        descripcion = input(\"Ingrese la descripción del producto: \")\n        precio = float(input(\"Ingrese el precio del producto: \"))\n        cantidad = int(input(\"Ingrese la cantidad del producto: \"))\n        categoria = input(\n            \"Ingrese la categoría del producto (ropa de hombre, ropa de mujer, ropa de niño, calzado): \"\n        )\n        cursor = conn.cursor()",
         "detail": "funciones",
         "documentation": {}
     },
