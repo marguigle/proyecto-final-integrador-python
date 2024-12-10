@@ -24,7 +24,10 @@ def menu_principal():
 
 
 ####  buscar producto
+
+
 def buscar_un_producto():
+    conn = sqlite3.connect("inventario.db")
     try:
         criterio = (
             input(
@@ -35,7 +38,6 @@ def buscar_un_producto():
         )
 
         if criterio == "nombre":
-
             nombre_producto = input(
                 "Ingrese el nombre del producto que desea buscar: "
             ).lower()
@@ -67,9 +69,10 @@ def buscar_un_producto():
                 )
 
         elif criterio == "id":
-            id_producto = (
-                input("Ingrese la ID del producto que desea buscar: ").lower().strip()
-            )
+            id_producto_input = input(
+                "Ingrese la ID del producto que desea buscar: "
+            ).strip()
+            id_producto = int(id_producto_input)
 
             cursor = conn.cursor()
 
@@ -77,9 +80,9 @@ def buscar_un_producto():
                 """
             SELECT id, nombre, descripcion, precio, cantidad, categoria
             FROM productos
-            WHERE LOWER(id) LIKE ?
+            WHERE id = ?
             """,
-                (id_producto),
+                (id_producto,),  # Pasamos como tupla
             )
 
             producto_encontrado = cursor.fetchone()
@@ -96,15 +99,21 @@ def buscar_un_producto():
                 print("=" * 60)
                 print(f"\nNo se encontró ningún producto con la ID '{id_producto}'.\n")
                 print("=" * 60)
+
             cursor.close()
+
     except sqlite3.Error as e:
         print(f"Error al buscar el producto: {e}")
+    finally:
+        conn.close()  # Cerrar la conexión en el bloque finally
 
 
 #### agregar producto
 
 
 def insertar_producto():
+    conn = sqlite3.connect("inventario.db")  # Conexión a la base de datos
+    cursor = conn.cursor()
     try:
         nombre = input("Ingrese el nombre del producto: ")
         descripcion = input("Ingrese la descripción del producto: ")
@@ -113,8 +122,6 @@ def insertar_producto():
         categoria = input(
             "Ingrese la categoría del producto (ropa de hombre, ropa de mujer, ropa de niño, calzado): "
         )
-
-        cursor = conn.cursor()
 
         cursor.execute(
             """
@@ -140,6 +147,7 @@ def insertar_producto():
 def ver_lista_completa_productos():
 
     try:
+        conn = sqlite3.connect("inventario.db")
         cursor = conn.cursor()
         cursor.execute(
             """
@@ -164,6 +172,9 @@ def ver_lista_completa_productos():
 ### eliminar un producto seleccionado por su id o por su nombre
 def eliminar_producto():
     try:
+        conn = sqlite3.connect("inventario.db")
+        cursor = conn.cursor()
+
         criterio = (
             input(
                 "¿Desea eliminar el producto por 'ID' o por 'Nombre'? (Escriba 'ID' o 'Nombre'): "
@@ -180,7 +191,6 @@ def eliminar_producto():
                 print("El ID debe ser un número válido.")
                 return
 
-            cursor = conn.cursor()
             cursor.execute("DELETE FROM productos WHERE id = ?", (id_producto,))
             conn.commit()
 
@@ -201,7 +211,6 @@ def eliminar_producto():
                 print("Debe ingresar un nombre válido.")
                 return
 
-            cursor = conn.cursor()
             cursor.execute("DELETE FROM productos WHERE nombre = ?", (nombre_producto,))
             conn.commit()
 
@@ -215,6 +224,7 @@ def eliminar_producto():
                 print("=" * 60)
                 print(f"No se encontró un producto con el Nombre '{nombre_producto}'.")
                 print("=" * 60)
+
         else:
             print("=" * 60)
             print("Opción inválida. Por favor, elija 'ID' o 'Nombre'.")
@@ -222,6 +232,9 @@ def eliminar_producto():
 
     except sqlite3.Error as e:
         print(f"Error al eliminar el producto: {e}")
+    finally:
+        if conn:
+            conn.close()  # Cerrar la conexión
 
 
 ######  actualizar producto  ######
@@ -229,7 +242,11 @@ def eliminar_producto():
 
 def actualizar_producto():
     try:
+        # Conexión a la base de datos
+        conn = sqlite3.connect("inventario.db")
+        cursor = conn.cursor()
 
+        # Selección del criterio de búsqueda
         criterio = (
             input(
                 "¿Desea actualizar el producto por 'ID' o por 'Nombre'? (Escriba 'ID' o 'Nombre'): "
@@ -242,19 +259,25 @@ def actualizar_producto():
             print("Criterio inválido. Por favor, elija 'ID' o 'Nombre'.")
             return
 
+        # Definir criterio de búsqueda y columna
         if criterio == "id":
             identificador = input(
                 "Ingrese la ID del producto que desea actualizar: "
             ).strip()
+            if not identificador.isdigit():
+                print("La ID debe ser un número válido.")
+                return
             columna_criterio = "id"
         else:
-            identificador = (
-                input("Ingrese el nombre del producto que desea actualizar: ")
-                .strip()
-                .lower()
-            )
-            columna_criterio = "LOWER(nombre)"
+            identificador = input(
+                "Ingrese el nombre del producto que desea actualizar: "
+            ).strip()
+            if not identificador:
+                print("Debe ingresar un nombre válido.")
+                return
+            columna_criterio = "nombre"
 
+        # Nuevos valores para actualizar
         nuevo_nombre = input(
             "Ingrese el nuevo nombre del producto (o presione Enter para no cambiar): "
         ).strip()
@@ -271,6 +294,7 @@ def actualizar_producto():
             "Ingrese la nueva categoría del producto (o presione Enter para no cambiar): "
         ).strip()
 
+        # Preparar campos para actualizar
         campos_a_actualizar = []
         valores = []
 
@@ -281,21 +305,29 @@ def actualizar_producto():
             campos_a_actualizar.append("descripcion = ?")
             valores.append(nueva_descripcion)
         if nuevo_precio:
-            campos_a_actualizar.append("precio = ?")
-            valores.append(float(nuevo_precio))
+            try:
+                valores.append(float(nuevo_precio))
+                campos_a_actualizar.append("precio = ?")
+            except ValueError:
+                print("El precio debe ser un número válido.")
+                return
         if nueva_cantidad:
-            campos_a_actualizar.append("cantidad = ?")
-            valores.append(int(nueva_cantidad))
+            try:
+                valores.append(int(nueva_cantidad))
+                campos_a_actualizar.append("cantidad = ?")
+            except ValueError:
+                print("La cantidad debe ser un número entero.")
+                return
         if nueva_categoria:
             campos_a_actualizar.append("categoria = ?")
             valores.append(nueva_categoria)
 
+        # Verificar si hay algo que actualizar
         if not campos_a_actualizar:
             print("No se proporcionaron nuevos valores. Nada que actualizar.")
             return
 
-        cursor = conn.cursor()
-
+        # Construir y ejecutar la consulta de actualización
         consulta = f"""
             UPDATE productos
             SET {', '.join(campos_a_actualizar)}
@@ -306,39 +338,50 @@ def actualizar_producto():
         cursor.execute(consulta, valores)
         conn.commit()
 
-        print("\nProducto actualizado exitosamente.\n")
-
-        cursor.close()
+        # Verificar si se actualizó algún registro
+        if cursor.rowcount > 0:
+            print("\nProducto actualizado exitosamente.\n")
+        else:
+            print(
+                "\nNo se encontró ningún producto que coincida con el criterio especificado.\n"
+            )
 
     except sqlite3.Error as e:
         print(f"Error al actualizar el producto: {e}")
     except ValueError as e:
         print(f"Error en los valores ingresados: {e}")
+    finally:
+        if conn:
+            conn.close()  # Cerrar la conexión para evitar fugas de recursos
 
 
 #### mostrar stock ####
 
 
 def mostrar_stock():
-
     try:
+        # Crear conexión a la base de datos
+        conn = sqlite3.connect("inventario.db")
+        cursor = conn.cursor()
+
+        # Solicitar el nombre del producto
         nombre_producto = (
             input("Ingrese el nombre del producto que desea ver el stock: ")
             .strip()
             .lower()
         )
 
-        cursor = conn.cursor()
-
+        # Ejecutar la consulta
         cursor.execute(
             """
-                SELECT cantidad
-                FROM productos
-                WHERE LOWER(nombre) LIKE ?
-                """,
+            SELECT cantidad
+            FROM productos
+            WHERE LOWER(nombre) LIKE ?
+            """,
             (f"%{nombre_producto}%",),
         )
 
+        # Recuperar el resultado
         producto_encontrado = cursor.fetchone()
 
         if producto_encontrado:
@@ -351,20 +394,51 @@ def mostrar_stock():
             print("=" * 60)
             print(f"No se encontró ningún producto con el nombre '{nombre_producto}'.")
             print("=" * 60)
+
     except sqlite3.Error as e:
         print(f"Error al consultar el stock: {e}")
+
+    finally:
+        # Cerrar la conexión
+        if conn:
+            conn.close()
 
 
 ####### detectar stock bajo #####
 def detectar_stock_bajo():
-    cursor = conn.cursor()
-    cursor.execute("""SELECT id,nombre, cantidad FROM productos WHERE CANTIDAD < 10;""")
-    cantidades = cursor.fetchall()
-    print("=" * 40)
-    print("productos con bajo stock :")
-    print("=" * 40)
-    print("")
-    for cantidad in cantidades:
+    try:
+        # Crear conexión a la base de datos
+        conn = sqlite3.connect("inventario.db")
+        cursor = conn.cursor()
 
-        print(f"id:{cantidad[0]} - producto: {cantidad[1]} - contidad: {cantidad[2]}")
-        print("-" * 40)
+        # Ejecutar la consulta para obtener productos con stock bajo
+        cursor.execute(
+            """SELECT id, nombre, cantidad FROM productos WHERE cantidad < 10;"""
+        )
+        cantidades = cursor.fetchall()
+
+        # Verificar si hay productos con stock bajo
+        if cantidades:
+            print("=" * 40)
+            print("Productos con bajo stock:")
+            print("=" * 40)
+            print("")
+
+            # Mostrar los productos con stock bajo
+            for cantidad in cantidades:
+                print(
+                    f"ID: {cantidad[0]} - Producto: {cantidad[1]} - Cantidad: {cantidad[2]}"
+                )
+                print("-" * 40)
+        else:
+            print("=" * 40)
+            print("No hay productos con stock bajo.")
+            print("=" * 40)
+
+    except sqlite3.Error as e:
+        print(f"Error al detectar el stock bajo: {e}")
+
+    finally:
+        # Cerrar la conexión
+        if conn:
+            conn.close()

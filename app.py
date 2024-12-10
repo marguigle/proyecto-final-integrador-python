@@ -2,6 +2,7 @@ from funciones import *
 
 
 def main():
+    crear_tabla()
     while True:
         menu_principal()
         opcion_elegida = input("Elija una opción: ")
