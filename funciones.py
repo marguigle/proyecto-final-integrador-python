@@ -1,26 +1,30 @@
 import sqlite3
 from database import *
 from tabulate import tabulate
-from colorama import Fore, Back, Style
+from colorama import init, Fore, Back, Style
+
+init()
+init(autoreset=True)
 
 
 #### menu principal
 def menu_principal():
     print(
         Style.BRIGHT
+        + Fore.MAGENTA
         + """        #######################################
                 GESTION DE STOCK
         #######################################\n"""
     )
-    print("Elija una opcion")
-    print("opcion 1: Agregar un producto")
-    print("opcion 2: Ver lista completa de productos")
-    print("opcion 3: Eliminar un producto de la lista")
-    print("opcion 4: Buscar un producto especifico de la lista")
-    print("opcion 5: Actualizar un producto")
-    print("opcion 6: mostrar stock de un  producto")
-    print("opcion 7: detectar stock bajo (menos de 10 unidades)")
-    print("opcion 8: Salir del menú\n")
+    print(Fore.BLUE + "Elija una opcion")
+    print(Fore.BLUE + "opcion 1: Agregar un producto")
+    print(Fore.BLUE + "opcion 2: Ver lista completa de productos")
+    print(Fore.BLUE + "opcion 3: Eliminar un producto de la lista")
+    print(Fore.BLUE + "opcion 4: Buscar un producto especifico de la lista")
+    print(Fore.BLUE + "opcion 5: Actualizar un producto")
+    print(Fore.BLUE + "opcion 6: mostrar stock de un  producto")
+    print(Fore.BLUE + "opcion 7: detectar stock bajo (menos de 10 unidades)")
+    print(Fore.BLUE + "opcion 8: Salir del menú\n")
 
 
 ####  buscar producto

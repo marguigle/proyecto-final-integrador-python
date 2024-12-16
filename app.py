@@ -1,11 +1,15 @@
 from funciones import *
+from colorama import init, Fore, Back, Style
+
+init()
+init(autoreset=True)
 
 
 def main():
     crear_tabla()
     while True:
         menu_principal()
-        opcion_elegida = input("Elija una opción: ")
+        opcion_elegida = input(Fore.GREEN + "Elija una opción: ")
         if opcion_elegida == "1":
             insertar_producto()
         elif opcion_elegida == "2":
@@ -21,7 +25,7 @@ def main():
         elif opcion_elegida == "7":
             detectar_stock_bajo()
         elif opcion_elegida == "8":
-            print("\nHASTA PRONTO !!!")
+            print(Fore.RED + "\nHASTA PRONTO !!!")
             break
         else:
             print("Elija una opción válida. Debe ser un número del 1 al 8.")
